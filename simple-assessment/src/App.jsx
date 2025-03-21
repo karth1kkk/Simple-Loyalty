@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
 import "./App.css";
-import csvData from './Table_Input.csv?raw';
 
 // reusable component to display data in a table format(referred chatgpt)
 const TableDisplay = ({ data, title }) => (
@@ -37,17 +36,26 @@ const App = () => {
   useEffect(() => {
     try {
       // to extract the data from the csv file using papaparse(used chatgpt)
-      Papa.parse(csvData, {
-        header: true,
-        complete: (result) => {
-          setTableData(result.data);
-          processTable2(result.data);
-        },
-        error: (error) => {
-          console.error("Error parsing CSV:", error);
-          alert("Failed to parse CSV data. Please check the console for details.");
-        }
-      });
+      fetch("https://simple-loyalty.vercel.app/Table_Input.csv")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then((csvText) => {
+          Papa.parse(csvText, {
+            header: true, 
+            complete: (result) => {
+              setTableData(result.data);
+              processTable2(result.data);
+            },
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading CSV:", error);
+          alert("Failed to load data. Please check the console for details.");
+        });
     } catch (error) {
       console.error("Error processing CSV:", error);
       alert("Failed to process data. Please check the console for details.");
