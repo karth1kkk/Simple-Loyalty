@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/Table_Input.csv", "destination": "/Table_Input.csv" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "buildCommand": "npm run build",
