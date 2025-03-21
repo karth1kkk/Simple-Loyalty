@@ -36,7 +36,12 @@ const App = () => {
   useEffect(() => {
     // fetching the CSV file from the specified location(referred chatgpt as ive not used papaparse)
     fetch("/Table_Input.csv")
-      .then((response) => response.text()) 
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
       .then((csvText) => {
         Papa.parse(csvText, {
           header: true, 
@@ -46,7 +51,10 @@ const App = () => {
           },
         });
       })
-      .catch((error) => console.error("Error loading CSV:", error));
+      .catch((error) => {
+        console.error("Error loading CSV:", error);
+        alert("Failed to load data. Please check the console for details.");
+      });
   }, []);
 
   // processing data from csv file and calculate table 2 values
