@@ -35,7 +35,7 @@ const App = () => {
 
   useEffect(() => {
     // fetching the CSV file from the specified location(referred chatgpt as ive not used papaparse)
-    fetch("/public/data/Table_Input.csv")
+    fetch("/data/Table_Input.csv")
       .then((response) => response.text()) 
       .then((csvText) => {
         Papa.parse(csvText, {
